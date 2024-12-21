@@ -1,4 +1,8 @@
-package PACKAGE_NAME;
-
 public class MesajIslem {
+    public static void gecmisYukle(){
+
+    }
+
+
+
 }

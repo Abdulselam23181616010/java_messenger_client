@@ -1,15 +1,15 @@
 public class Response extends Gonderi{
-    private boolean responseCode;
+    private int responseCode;
 
     public Response(int requestType, String string, User user) {
         super(requestType, string, user);
     }
 
-    public void setResponseCode(boolean responseCode){
+    public void setResponseCode(int responseCode){
         this.responseCode = responseCode;
     }
 
-    public boolean getResponseCode(){
+    public int getResponseCode(){
         return this.responseCode;
     }
 

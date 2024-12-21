@@ -11,7 +11,7 @@ public class User {
 
     }
 
-    public User(String username,String sifreHash, String isim, String soyisim){
+    public User(String username, String sifreHash, String isim, String soyisim){
         this.username = username;
         this.sifreHash = sifreHash;
         this.isim = isim;
