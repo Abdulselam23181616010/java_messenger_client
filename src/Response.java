@@ -1,8 +1,8 @@
 public class Response extends Gonderi{
     private int responseCode;
 
-    public Response(int requestType, String string, User user) {
-        super(requestType, string, user);
+    public Response(int requestType, Mesaj mesaj, User user) {
+        super(requestType, mesaj, user);
     }
 
     public void setResponseCode(int responseCode){

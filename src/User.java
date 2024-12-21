@@ -1,19 +1,19 @@
 public class User {
     String username;
-    String sifreHash;
+    String sifre;
     String isim;
     String soyisim;
 
-    public User(String username, String sifreHash){
+    public User(String username, String sifre){
         this.username = username;
-        this.sifreHash = sifreHash;
+        this.sifre = sifre;
 
 
     }
 
-    public User(String username, String sifreHash, String isim, String soyisim){
+    public User(String username, String sifre, String isim, String soyisim){
         this.username = username;
-        this.sifreHash = sifreHash;
+        this.sifre = sifre;
         this.isim = isim;
         this.soyisim = soyisim;
 

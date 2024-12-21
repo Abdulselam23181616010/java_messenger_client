@@ -1,12 +1,12 @@
 public class Gonderi {
-    protected int requestType;
-    protected String mesaj;
-    protected User user;
+    private int requestType;
+    private Mesaj mesaj;
+    private User user;
 
     //Gonderi için constructor oluşturalım
-    public Gonderi(int requestType, String mesaj, User user){
+    public Gonderi(int requestType, Mesaj mesaj, User user){
         this.requestType = requestType;
-        setMesaj(mesaj);
+        this.mesaj = mesaj;
         this.user  = user;
 
     }
@@ -17,13 +17,5 @@ public class Gonderi {
 
     }
 
-    //String için setter ve getter oluşturalım
-    public void setMesaj(String mesaj) {
-        this.mesaj = mesaj;
-    }
-
-    public String getMesaj() {
-        return mesaj;
-    }
 
 }

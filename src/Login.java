@@ -17,35 +17,52 @@ public class Login {
         loginFrame.setLayout(null);
 
 
-        JLabel label1  = new JLabel("GİRİŞ YAP");
-        label1.setFont(new Font("Arial", Font.BOLD, 20));
-        label1.setLocation(200,100);
-        label1.setSize(150, 50);
-        loginFrame.add(label1);
+        JLabel girisYapLabel  = new JLabel("GİRİŞ YAP");
+        girisYapLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        girisYapLabel.setLocation(200,100);
+        girisYapLabel.setSize(150, 50);
+        loginFrame.add(girisYapLabel);
 
-        JLabel label2  = new JLabel("kullaınıcı  ismini giriniz ");
-        label2.setFont(new Font("Arial", Font.BOLD, 15));
-        label2.setLocation(85,175);
-        label2.setSize(300, 50);
-        loginFrame.add(label2);
+        JLabel isimLabel  = new JLabel("kullaınıcı  ismini giriniz ");
+        isimLabel.setFont(new Font("Arial", Font.BOLD, 15));
+        isimLabel.setLocation(85,175);
+        isimLabel.setSize(300, 50);
+        loginFrame.add(isimLabel);
 
-        JLabel label3  = new JLabel("şifrenizi giriniz");
-        label3.setFont(new Font("Arial", Font.BOLD, 15));
-        label3.setLocation(85,210);
-        label3.setSize(200, 50);
-        loginFrame.add(label3);
+        JLabel sifreLabel  = new JLabel("şifrenizi giriniz");
+        sifreLabel.setFont(new Font("Arial", Font.BOLD, 15));
+        sifreLabel.setLocation(85,210);
+        sifreLabel.setSize(200, 50);
+        loginFrame.add(sifreLabel);
 
-        JTextField text1 = new JTextField();
-        text1.setFont(new Font("Arial", Font.BOLD, 15));
-        text1.setLocation(285,190);
-        text1.setSize(150, 20);
-        loginFrame.add(text1);
+        JTextField usernameField = new JTextField();
+        usernameField.setFont(new Font("Arial", Font.BOLD, 15));
+        usernameField.setLocation(285,190);
+        usernameField.setSize(150, 20);
+        loginFrame.add(usernameField);
 
-        JTextField text2 = new JTextField();
-        text2.setFont(new Font("Arial", Font.BOLD, 15));
-        text2.setLocation(285,225);
-        text2.setSize(150, 20);
-        loginFrame.add(text2);
+        JTextField sifreField = new JTextField();
+        sifreField.setFont(new Font("Arial", Font.BOLD, 15));
+        sifreField.setLocation(285,225);
+        sifreField.setSize(150, 20);
+        loginFrame.add(sifreField);
+
+        JButton girisYap = new JButton("giris yap");
+
+        girisYap.setSize(130, 35);
+        girisYap.setLocation(120, 325);
+        loginFrame.add(girisYap);
+
+        girisYap.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                User user = new User(usernameField.getText(),sifreField.getText());
+                Gonderi gonderi = new Gonderi(2,null,user);
+                Client.gonder(gonderi);
+
+
+            }
+        });
 
         JButton üyeOl = new JButton ( "Üye ol");
 
@@ -75,20 +92,6 @@ public class Login {
             }
         });
 
-        JButton girisYap = new JButton("giris yap");
-
-        girisYap.setSize(130, 35);
-        girisYap.setLocation(120, 325);
-        loginFrame.add(girisYap);
-
-        girisYap.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane panel = new JOptionPane();
-                JOptionPane.showMessageDialog(null,"Merhaba " + text1.getText() +  " programa hos geldiniz" );
-
-            }
-        });
         Color eskirenk2 = girisYap.getBackground();
         girisYap.addMouseListener(new MouseAdapter() {
             @Override

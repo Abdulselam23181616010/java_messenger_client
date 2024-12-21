@@ -40,15 +40,51 @@ public class Client {
                 }
             }).start();
 
-            // Read messages from the console and send to the server
-            Scanner scanner = new Scanner(System.in);
-            String userInput;
-            while (true) {
+            while (true){
 
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
+
+    public static void gonder(Gonderi gonderi) {
+        try {
+            socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+            System.out.println("Connected to the chat server!");
+
+            // İletişim için input/output oluşturalım
+            try {
+                out = new ObjectOutputStream(socket.getOutputStream());
+                in = new ObjectInputStream(socket.getInputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            String gonderiString = SifrelemeClient.sifrele(gonderi);
+
+            // Gelen mesajları almak için Threat oluşturalım
+            new Thread(() -> {
+                try {
+                    out.writeObject(gonderiString);
+                    String serverResponseString = (String) in.readObject();
+                    Response serverResponse = SifrelemeClient.cevir(serverResponseString);
+                    while (serverResponse != null) {
+                        ResponseSolver responseSolver = (ResponseSolver) serverResponse;
+                        responseSolver.solve();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

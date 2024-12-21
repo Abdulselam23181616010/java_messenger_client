@@ -1,24 +1,25 @@
 public class ResponseSolver extends Response{
 
-    public ResponseSolver(int requestType, String string, User user) {
-        super(requestType, string, user);
+    public ResponseSolver(int requestType, Mesaj mesaj, User user) {
+        super(requestType, mesaj, user);
     }
 
-    public void solve(){
+    public int solve(){
         try{
             switch (super.getResponseCode()){
                 case 11:
-                    break;
+                    return 1;
                 case 21:
-                    break;
+                    return 1;
                 case 31:
-                    break;
+                    return 1;
                 default:
-
+                    return 0;
             }
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            return 0;
         }
     }
 
