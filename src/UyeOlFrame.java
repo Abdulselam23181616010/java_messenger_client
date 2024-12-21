@@ -12,6 +12,7 @@ public class UyeOlFrame extends JFrame {
     JTextField usernameField = new JTextField();
     JTextField sifreField = new JTextField();
     JButton uyeOlButonu = new JButton("Üye ol");
+    JButton geriGit = new JButton("Geri git");
 
     public UyeOlFrame(){
         this.setTitle("Üye ol");
@@ -68,14 +69,6 @@ public class UyeOlFrame extends JFrame {
         uyeOlButonu.setSize(150, 25);
 
 
-        uyeOlButonu.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null,"Merhaba " + isimField.getText() + " uyeniz basayla gerceklesti");
-                System.out.println();
-
-            }
-        });
-
         Color eskirenk1  = uyeOlButonu.getBackground();
         uyeOlButonu.addMouseListener(new MouseAdapter() {
             @Override
@@ -91,11 +84,10 @@ public class UyeOlFrame extends JFrame {
             }
         });
 
-        JButton geriGit = new JButton("Geri git");
         geriGit.setFont(new Font("Arial", Font.BOLD, 15));
         geriGit.setLocation(85,370);
         geriGit.setSize(150, 25);
-        this.add(geriGit);
+
 
         Color eskirenk2  = geriGit.getBackground();
         geriGit.addActionListener(new ActionListener() {
@@ -119,6 +111,7 @@ public class UyeOlFrame extends JFrame {
             }
         });
 
+        //Oluşturduğumuz nesneleri Jframe'e ekleyelim
         this.add(uyeOlLabel);
         this.add(isimLabel);
         this.add(soyisimlabel);
@@ -128,12 +121,18 @@ public class UyeOlFrame extends JFrame {
         this.add(soyisimField);
         this.add(usernameField);
         this.add(sifreField);
+        this.add(uyeOlButonu);
+        this.add(geriGit);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     public void addUyeOlListener(ActionListener listener) {
         uyeOlButonu.addActionListener(listener);
+
+    }
+    public void addGeriGitListener(ActionListener listener) {
+        geriGit.addActionListener(listener);
 
     }
 

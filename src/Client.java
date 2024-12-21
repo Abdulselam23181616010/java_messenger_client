@@ -19,7 +19,12 @@ public class Client {
             @Override
             public void actionPerformed(ActionEvent e) {
                 user = new User(loginUI.getUsername(), loginUI.getSifre());
-        }
+                try {
+                    out.writeObject(user);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
         });
 
         loginUI.addUyeOlListener(new ActionListener() {
@@ -27,6 +32,24 @@ public class Client {
             public void actionPerformed(ActionEvent e) {
                 loginUI.setVisible(false);
                 uyeolUI.setVisible(true);
+            }
+        });
+        uyeolUI.addUyeOlListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                user = new User(uyeolUI.getUsername(), uyeolUI.getSifre(), uyeolUI.getIsim(), uyeolUI.getSoyisim());
+                try {
+                    out.writeObject(user);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        uyeolUI.addGeriGitListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                uyeolUI.setVisible(false);
+                loginUI.setVisible(true);
             }
         });
     }
@@ -42,6 +65,7 @@ public class Client {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
 
             // Gelen mesajları almak için Threat oluşturalım
             new Thread(() -> {
@@ -59,9 +83,7 @@ public class Client {
                 }
             }).start();
 
-            while (true){
 
-            }
 
         } catch (IOException e) {
             e.printStackTrace();
