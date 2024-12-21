@@ -2,7 +2,7 @@
 public class Main {
 
     public static void main(String[] args) {
-        Login.loginPage();
-        Client.clientCalistir();
+        Client client = new Client();
+        client.clientCalistir();
     }
 }

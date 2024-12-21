@@ -1,16 +1,35 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
 
 public class Client {
+    private LoginFrame loginUI = new LoginFrame();
+    private UyeOlFrame uyeolUI = new UyeOlFrame();
     private static final String SERVER_ADDRESS = "localhost";
     private static final int SERVER_PORT = 1234;
-
     private static Socket socket;
     private static ObjectOutputStream out;
     private static ObjectInputStream in;
     private User user;
 
+    public Client(){
+        loginUI.addGirisListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                user = new User(loginUI.getUsername(), loginUI.getSifre());
+        }
+        });
+
+        loginUI.addUyeOlListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loginUI.setVisible(false);
+                uyeolUI.setVisible(true);
+            }
+        });
+    }
     public static void clientCalistir() {
         try {
             socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
@@ -31,7 +50,7 @@ public class Client {
                     Response serverResponse = SifrelemeClient.cevir(serverResponseString);
                     while (serverResponse != null) {
                         ResponseSolver responseSolver = (ResponseSolver)serverResponse;
-                        responseSolver.solve();
+
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -73,7 +92,7 @@ public class Client {
                     Response serverResponse = SifrelemeClient.cevir(serverResponseString);
                     while (serverResponse != null) {
                         ResponseSolver responseSolver = (ResponseSolver) serverResponse;
-                        responseSolver.solve();
+
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
