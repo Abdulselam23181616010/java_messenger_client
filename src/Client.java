@@ -83,13 +83,13 @@ public class Client {
                     LocalDateTime currentTime = LocalDateTime.now();
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                     String formattedDateTime = currentTime.format(formatter);
-                    String string = "You (" + formattedDateTime + "): " + message + "\n";
+                    String string = user.getUsername() + "[" + formattedDateTime + "]: " + message + "\n";
                     SwingUtilities.invokeLater(() -> chatUI.writeMessageArea(string));
                     SwingUtilities.invokeLater(() -> chatUI.setMessageField(""));
 
                     // Run the network operation in a background thread
                         try {
-                            Gonderi gonderi = new Gonderi(3, new Mesaj(user.username, message));
+                            Gonderi gonderi = new Gonderi(3, new Mesaj(user.getUsername(), message));
                             gonder(gonderi);
                         } catch (Exception ex) {
                             ex.printStackTrace();
@@ -99,7 +99,24 @@ public class Client {
                     SwingUtilities.invokeLater(() -> chatUI.getSendButton().setEnabled(true));
                 }
             }
-        });;
+        });
+
+        chatUI.addGecmissListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                chatUI.getSendButton().setEnabled(false);
+                // Run the network operation in a background thread
+                try {
+                    Gonderi gonderi = new Gonderi(4, new Mesaj(user.getIsim(), null));
+                    gonder(gonderi);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+
+                SwingUtilities.invokeLater(() -> chatUI.getSendButton().setEnabled(true));
+            }
+
+        });
 
 
 
@@ -129,6 +146,7 @@ public class Client {
                     if (serverResponse != null) {
                         switch (serverResponse.getResponseCode()) {
                             case 10:
+                                Popup.showPopup(loginUI,"Giris yapılamadı");
                                 break;
                             case 11:
                                 System.out.println("oldu");
@@ -136,8 +154,10 @@ public class Client {
                                 chatUI.setVisible(true);
                                 break;
                             case 20:
+                                Popup.showPopup(uyeolUI,"Kullancı oluşturamadı");
                                 break;
                             case 21:
+                                Popup.showPopup(uyeolUI,"Kullancı oluşturuldu");
                                 break;
                             case 31:
                                 new Thread(() -> {
@@ -161,21 +181,13 @@ public class Client {
     }
 
     public void gonder(Gonderi gonderi) {
-        SwingWorker worker = new SwingWorker<Void, Void>(){
-            @Override
-            protected Void doInBackground() throws Exception {
-                try {
-                    String responseString = SifrelemeClient.sifrele(gonderi);
-                    out.writeObject(responseString);
-                    out.flush();
+        try {
+            String responseString = SifrelemeClient.sifrele(gonderi);
+            out.writeObject(responseString);
+            out.flush();
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-        };
-
+        } catch (Exception e)
+            {e.printStackTrace();}
 
 
     }

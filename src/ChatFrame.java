@@ -9,7 +9,7 @@ public class ChatFrame extends JFrame {
     private JTextArea messageArea;
     private JTextField messageField;
     private JButton sendButton;
-    private JButton  geri;
+    private JButton  gecmis;
 
     public ChatFrame() {
         // Pencere başlığı
@@ -35,8 +35,8 @@ public class ChatFrame extends JFrame {
 
         sendButton = new JButton("Gönder"); // Gönder butonu
         inputPanel.add(sendButton, BorderLayout.EAST);
-        geri = new JButton("geçmiş yükle");
-        inputPanel.add(geri, BorderLayout.WEST);
+        gecmis = new JButton("geçmiş yükle");
+        inputPanel.add(gecmis, BorderLayout.WEST);
 
 
         add(inputPanel, BorderLayout.SOUTH);
@@ -52,7 +52,9 @@ public class ChatFrame extends JFrame {
         sendButton.addActionListener(listener);
     }
 
-
+    public void addGecmissListener(ActionListener listener){
+        gecmis.addActionListener(listener);
+    }
 
     public JTextField getMessageField(){
         return messageField;

@@ -105,6 +105,7 @@ public class UyeOlFrame extends JFrame {
             }
         });
 
+
         //Oluşturduğumuz nesneleri Jframe'e ekleyelim
         this.add(uyeOlLabel);
         this.add(isimLabel);
