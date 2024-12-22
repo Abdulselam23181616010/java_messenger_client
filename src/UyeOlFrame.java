@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+//Bu kullancı oluşturmak istediğimiz zaman karşımıza çıkacak olan arayüzdür
 public class UyeOlFrame extends JFrame {
     //İlk önce kullancıyı kaydetmek için kullanacağımız field ve butonları oluşturalım
     JTextField isimField = new JTextField();
@@ -64,6 +65,7 @@ public class UyeOlFrame extends JFrame {
         sifreField.setLocation(250,312);
         sifreField.setFont(new Font("Arial", Font.BOLD, 15));
 
+        //Butonun stillerini de yapalım
         uyeOlButonu.setFont(new Font("Arial", Font.BOLD, 15));
         uyeOlButonu.setLocation(250,370);
         uyeOlButonu.setSize(150, 25);
@@ -122,16 +124,7 @@ public class UyeOlFrame extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    public void addUyeOlListener(ActionListener listener) {
-        uyeOlButonu.addActionListener(listener);
-
-    }
-    public void addGeriGitListener(ActionListener listener) {
-        geriGit.addActionListener(listener);
-
-    }
-
-    //Fieldlerdeki getterleirmizi oluşturalım
+    //Fieldlerdeki getterleirmizi de  oluşturalım
     public String getIsim() {
         return isimField.getText();
     }
@@ -147,6 +140,18 @@ public class UyeOlFrame extends JFrame {
     public String getSifre() {
         return new String(sifreField.getText());
     }
+
+
+    //Bu butona bastığında oluşan işlemleri sonra kullanılacak olacağımız metodları oluşturalım.
+    public void addUyeOlListener(ActionListener listener) {
+        uyeOlButonu.addActionListener(listener);
+
+    }
+    public void addGeriGitListener(ActionListener listener) {
+        geriGit.addActionListener(listener);
+
+    }
+
 }
 
 

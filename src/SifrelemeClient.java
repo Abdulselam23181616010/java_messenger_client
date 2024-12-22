@@ -41,7 +41,8 @@ public class SifrelemeClient {
     }
 
 
-    public static Gonderi cevir(String sifrelenmisVeri){        try {
+    public static Gonderi cevir(String sifrelenmisVeri){
+        try {
         // Decrypt the encrypted string
         String decryptedBase64 = AESUtil.decrypt(sifrelenmisVeri, SECRET_KEY);
 
