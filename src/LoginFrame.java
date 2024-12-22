@@ -27,7 +27,7 @@ public class LoginFrame extends JFrame {
         girisYapLabel.setLocation(200,100);
         girisYapLabel.setSize(150, 50);
 
-        JLabel isimLabel  = new JLabel("kullaınıcı  ismini giriniz ");
+        JLabel isimLabel  = new JLabel("kullanıcı ismini giriniz ");
         isimLabel.setFont(new Font("Arial", Font.BOLD, 15));
         isimLabel.setLocation(85,175);
         isimLabel.setSize(300, 50);

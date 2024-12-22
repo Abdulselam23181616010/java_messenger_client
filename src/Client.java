@@ -158,6 +158,8 @@ public class Client {
                                 break;
                             case 21:
                                 Popup.showPopup(uyeolUI,"Kullancı oluşturuldu");
+                                uyeolUI.setVisible(false);
+                                loginUI.setVisible(true);
                                 break;
                             case 31:
                                 new Thread(() -> {
