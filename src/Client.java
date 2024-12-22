@@ -7,14 +7,21 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
+//Kullancımızın ana işlemleri burda gerçeleşecek
 public class Client {
+    //Hassa içerikler için config'ten veriler çekelim
     private static Properties prop = ConfigHandler.use();
 
+    //Kullancı arayüzleri çağıralım
     private  LoginFrame loginUI = new LoginFrame();
     private  UyeOlFrame uyeolUI = new UyeOlFrame();
     private  ChatFrame chatUI = new ChatFrame();
+
+    //Sunucuya bağlanmak için değerleri belirtelim
     private static final String SERVER_ADDRESS = prop.getProperty("SERVER_ADRESS","");
     private static final int SERVER_PORT = Integer.valueOf(prop.getProperty("SERVER_PORT"));
+
+    //Output-input, bağlanacak Socket ve kullancı bilgileri de lazım olacak
     private  Socket socket;
     private  ObjectOutputStream out;
     private  ObjectInputStream in;
@@ -80,9 +87,10 @@ public class Client {
                 String message = chatUI.getMessageField().getText();
 
                 if (message != null && !message.isEmpty()) {
+                    //Yanlışıkla butonun basılmaması için butonu bir süreliğine kapatalım
                     chatUI.getSendButton().setEnabled(false);
 
-                    // Format and display the message
+                    // Mesajı formatlayarak gösterelim
                     LocalDateTime currentTime = LocalDateTime.now();
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                     String formattedDateTime = currentTime.format(formatter);
@@ -90,15 +98,13 @@ public class Client {
                     SwingUtilities.invokeLater(() -> chatUI.writeMessageArea(string));
                     SwingUtilities.invokeLater(() -> chatUI.setMessageField(""));
 
-                    // Run the network operation in a background thread
-                        try {
-                            Gonderi gonderi = new Gonderi(3, new Mesaj(user.getUsername(), message));
-                            gonder(gonderi);
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-
-
+                    try {
+                        Gonderi gonderi = new Gonderi(3, new Mesaj(user.getUsername(), message));
+                        gonder(gonderi);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    //<işlemimiz bittiğine göre butonu açabiliriz
                     SwingUtilities.invokeLater(() -> chatUI.getSendButton().setEnabled(true));
                 }
             }
@@ -108,7 +114,6 @@ public class Client {
             @Override
             public void actionPerformed(ActionEvent e) {
                 chatUI.getSendButton().setEnabled(false);
-                // Run the network operation in a background thread
                 try {
                     Gonderi gonderi = new Gonderi(4, new Mesaj(user.getIsim(), null));
                     gonder(gonderi);
@@ -120,7 +125,6 @@ public class Client {
             }
 
         });
-
 
 
     }
@@ -137,15 +141,15 @@ public class Client {
         }
 
 
-
-
         // Gelen mesajları almak için Threat oluşturalım
         new Thread(() -> {
             try {
-                while (true) { // Keep listening for messages
+                //Gönderileri sürekli okumamız için while loop kullanalım
+                while (true) {
                     String serverResponseString = (String) this.in.readObject();
                     Gonderi serverResponse = SifrelemeClient.cevir(serverResponseString);
 
+                    //Gelen sunucu döndüye göre işlem yapalım(daha fazla bilgi için README okuyun)
                     if (serverResponse != null) {
                         switch (serverResponse.getResponseCode()) {
                             case 10:
@@ -185,6 +189,7 @@ public class Client {
 
     }
 
+    //YUkarıda kullanacağımız gonderi metodu oluşturalım
     public void gonder(Gonderi gonderi) {
         try {
             String responseString = SifrelemeClient.sifrele(gonderi);

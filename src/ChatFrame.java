@@ -1,10 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
+
+//Mesajlaşmanın gerçekleştiği kullancı arayüzüdür
 public class ChatFrame extends JFrame {
     private JTextArea messageArea;
     private JTextField messageField;
@@ -48,25 +47,7 @@ public class ChatFrame extends JFrame {
         setLocationRelativeTo(null); // Ortala
     }
 
-    public void addSendListener(ActionListener listener){
-        sendButton.addActionListener(listener);
-    }
-
-    public void addGecmissListener(ActionListener listener){
-        gecmis.addActionListener(listener);
-    }
-
-    public JTextField getMessageField(){
-        return messageField;
-
-    }
-
-    public void writeMessageArea(String mesaj) {
-        SwingUtilities.invokeLater(() -> {
-            this.messageArea.append(mesaj);
-        });
-    }
-
+    //Gerekli getter-setter oluşturalım
     public JTextArea getMessageArea(){
         return messageArea;
     }
@@ -82,4 +63,24 @@ public class ChatFrame extends JFrame {
     public void setMessageField(String s) {
         messageField.setText(s);
     }
+    public void addSendListener(ActionListener listener){
+        sendButton.addActionListener(listener);
+    }
+
+    //Butonlar için metodları tanımlayalım
+    public void addGecmissListener(ActionListener listener){
+        gecmis.addActionListener(listener);
+    }
+
+    public JTextField getMessageField(){
+        return messageField;
+
+    }
+    //Mesajların chate yazdırmasını sağlayan metodta oluşturalım
+    public void writeMessageArea(String mesaj) {
+        SwingUtilities.invokeLater(() -> {
+            this.messageArea.append(mesaj);
+        });
+    }
+
 }
