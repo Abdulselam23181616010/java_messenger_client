@@ -1,20 +1,26 @@
 import java.io.*;
 import java.util.Base64;
+import java.util.Properties;
 
 
 public class SifrelemeClient {
-    private static final String SECRET_KEY = "5ROIfv7Sf0nK9RfeqIkhtC6378OiR5E0VyTnjmXejY0=";
+    //Hassas içerikleri config filedan çekelim
+    private static Properties prop = ConfigHandler.use();
+
+    private static final String SECRET_KEY = prop.getProperty("SECRET_KEY","");
+
+    //Gonderi nesneleri şifrelemek için metodtur
     public static String sifrele(Gonderi gonderi){
         try {
-            // Convert the user object to a byte array
+            // Gonderi nesneyi bayt diziye çevirelim
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
             objectOutputStream.writeObject(gonderi);
 
-            // Encode the byte array to Base64
+            // bayt diziyi base64 şeklinde kodlayalım
             String base64Encoded = Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
 
-            // Encrypt the Base64-encoded string
+            // base64 diziyi şifreyelim
             return AESUtil.encrypt(base64Encoded, SECRET_KEY);
         } catch (Exception e) {
             e.printStackTrace();
@@ -22,17 +28,18 @@ public class SifrelemeClient {
         }
     }
 
+    //User nesneleri şifrelemek için metodtur
     public static String userSifrele(User user){
         try {
-            // Convert the user object to a byte array
+            // Gonderi nesneyi bayt diziye çevirelim
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
             objectOutputStream.writeObject(user);
 
-            // Encode the byte array to Base64
+            // bayt diziyi base64 şeklinde kodlayalım
             String base64Encoded = Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
 
-            // Encrypt the Base64-encoded string
+            // base64 diziyi şifreyelim
             return AESUtil.encrypt(base64Encoded, SECRET_KEY);
         } catch (Exception e) {
             e.printStackTrace();
@@ -40,24 +47,24 @@ public class SifrelemeClient {
         }
     }
 
-
+    //gonderiyi şifrelemek için metodtur
     public static Gonderi cevir(String sifrelenmisVeri){
         try {
-        // Decrypt the encrypted string
-        String decryptedBase64 = AESUtil.decrypt(sifrelenmisVeri, SECRET_KEY);
+            // Şifrelenmiş veriyi çözelim
+            String decryptedBase64 = AESUtil.decrypt(sifrelenmisVeri, SECRET_KEY);
 
-        // Decode the Base64 string back to bytes
-        byte[] decryptedBytes = Base64.getDecoder().decode(decryptedBase64);
+            // Base64 kodtan bayt diziye de çevirelim
+            byte[] decryptedBytes = Base64.getDecoder().decode(decryptedBase64);
 
-        // Convert the byte array back into a User object
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(decryptedBytes);
-        ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+            //Bayt diziyi tekrar gönderi nesneye çevirelim ve döndürelim
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(decryptedBytes);
+            ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
 
-        return (Gonderi) objectInputStream.readObject();
-    } catch (Exception e) {
-        e.printStackTrace();
-        return null;
-    }
+            return (Gonderi) objectInputStream.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

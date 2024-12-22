@@ -5,13 +5,16 @@ import java.io.*;
 import java.net.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Properties;
 
 public class Client {
+    private static Properties prop = ConfigHandler.use();
+
     private  LoginFrame loginUI = new LoginFrame();
     private  UyeOlFrame uyeolUI = new UyeOlFrame();
     private  ChatFrame chatUI = new ChatFrame();
-    private static final String SERVER_ADDRESS = "localhost";
-    private static final int SERVER_PORT = 1234;
+    private static final String SERVER_ADDRESS = prop.getProperty("SERVER_ADRESS","");
+    private static final int SERVER_PORT = Integer.valueOf(prop.getProperty("SERVER_PORT"));
     private  Socket socket;
     private  ObjectOutputStream out;
     private  ObjectInputStream in;
