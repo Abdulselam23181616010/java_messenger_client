@@ -52,7 +52,7 @@ public class SifrelemeClient {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(decryptedBytes);
         ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
 
-        return (Response) objectInputStream.readObject();
+        return (Gonderi) objectInputStream.readObject();
     } catch (Exception e) {
         e.printStackTrace();
         return null;

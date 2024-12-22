@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -75,27 +76,31 @@ public class Client {
             public void actionPerformed(ActionEvent e) {
                 String message = chatUI.getMessageField().getText();
 
-                if (message != null) {
+                if (message != null && !message.isEmpty()) {
                     chatUI.getSendButton().setEnabled(false);
 
-                    // Şu anki tarih ve saati al ve biçimlendir
+                    // Format and display the message
                     LocalDateTime currentTime = LocalDateTime.now();
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // Yıl-ay-gün saat:dakika:saniye
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                     String formattedDateTime = currentTime.format(formatter);
-                    // Mesajı kendi chatimize yazdıralım
-                    chatUI.writeMessageArea("Sen (" + formattedDateTime + "): " + message + "\n");
-                    System.out.println("tst");
-                    chatUI.setMessageArea("");
+                    String string = "You (" + formattedDateTime + "): " + message + "\n";
+                    SwingUtilities.invokeLater(() -> chatUI.writeMessageArea(string));
+                    SwingUtilities.invokeLater(() -> chatUI.setMessageField(""));
 
+                    // Run the network operation in a background thread
                     new Thread(() -> {
-                        //Sonra bu mesaje başka kullancılara gönderelim.
-                        Gonderi gonderi = new Gonderi(3, new Mesaj(user.username, message));
-                        gonder(gonderi);
+                        try {
+                            Gonderi gonderi = new Gonderi(3, new Mesaj(user.username, message));
+                            gonder(gonderi);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }).start();
 
+                    SwingUtilities.invokeLater(() -> chatUI.getSendButton().setEnabled(true));
                 }
             }
-        });
+        });;
 
 
 
@@ -103,20 +108,22 @@ public class Client {
 
     //Şimdi aslında programın ana kısmını metod içine yazalım
     public  void clientCalistir() {
-        // İletişim için input/output oluşturalım
         try {
-            out = new ObjectOutputStream(socket.getOutputStream());
-            out.flush();
-            in = new ObjectInputStream(socket.getInputStream());
+            // İletişim için input/output oluşturalım
+            this.out = new ObjectOutputStream(socket.getOutputStream());
+            this.out.flush();
+            this.in = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
 
+
+
         // Gelen mesajları almak için Threat oluşturalım
         new Thread(() -> {
             try {
-                String serverResponseString = (String)in.readObject();
+                String serverResponseString = (String)this.in.readObject();
                 Gonderi serverResponse = SifrelemeClient.cevir(serverResponseString);
 
                 boolean isPopupShown = false;
@@ -141,19 +148,21 @@ public class Client {
                             }
                             break;
                         case 21:
-                            //olumlu popup
                             if (!isPopupShown){
                                 Popup.showPopup(uyeolUI,"Kullancı oluşturuldu!");
                                 isPopupShown = true;
                             }
+                            break;
                         case 31:
-                            //mesaj nesnesini alıp ondan anlamlı mesaj stringi oluşturalım
-                            Mesaj mesaj = serverResponse.getMesaj();
-                            String string = mesaj.getGonderici() + "[" + mesaj.getTime() + "]: " + mesaj.getMesaj() + "\n";
+                            new Thread(() -> {
+                                //mesaj nesnesini alıp ondan anlamlı mesaj stringi oluşturalım
+                                Mesaj mesaj = serverResponse.getMesaj();
+                                String string = mesaj.getGonderici() + "[" + mesaj.getTime() + "]: " + mesaj.getMesaj() + "\n";
+                                //Sonra mesajı chate yazdıralım ve alanı temizleyelim
+                                chatUI.writeMessageArea(string);
+                                chatUI.setMessageArea("");
 
-                            //Sonra mesajı chate yazdıralım ve alanı temizleyelim
-                            chatUI.writeMessageArea(string);
-                            chatUI.setMessageArea("");
+                            }).start();
                             break;
 
                         default:
@@ -170,14 +179,18 @@ public class Client {
     }
 
     public void gonder(Gonderi gonderi) {
-        try {
-            String gonderiString = SifrelemeClient.sifrele(gonderi);
-            out.writeObject(gonderiString);
-            out.flush();
+        new Thread(() -> {
+            synchronized (this) {
+            try {
+                String responseString = SifrelemeClient.sifrele(gonderi);
+                out.writeObject(responseString);
+                out.flush();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }}).start();
+
 
     }
 
