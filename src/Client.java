@@ -32,10 +32,10 @@ public class Client {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try{
-                user = new User(loginUI.getUsername(), loginUI.getSifre());
-                String userString = SifrelemeClient.userSifrele(user);
-                out.writeObject(userString);
-                out.flush(); // Ensure data is sent
+                    user = new User(loginUI.getUsername(), loginUI.getSifre());
+                    String userString = SifrelemeClient.userSifrele(user);
+                    out.writeObject(userString);
+                    out.flush();
             }catch(Exception ex){
                 ex.printStackTrace();
             }
@@ -88,14 +88,13 @@ public class Client {
                     SwingUtilities.invokeLater(() -> chatUI.setMessageField(""));
 
                     // Run the network operation in a background thread
-                    new Thread(() -> {
                         try {
                             Gonderi gonderi = new Gonderi(3, new Mesaj(user.username, message));
                             gonder(gonderi);
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
-                    }).start();
+
 
                     SwingUtilities.invokeLater(() -> chatUI.getSendButton().setEnabled(true));
                 }
@@ -123,55 +122,38 @@ public class Client {
         // Gelen mesajları almak için Threat oluşturalım
         new Thread(() -> {
             try {
-                String serverResponseString = (String)this.in.readObject();
-                Gonderi serverResponse = SifrelemeClient.cevir(serverResponseString);
+                while (true) { // Keep listening for messages
+                    String serverResponseString = (String) this.in.readObject();
+                    Gonderi serverResponse = SifrelemeClient.cevir(serverResponseString);
 
-                boolean isPopupShown = false;
-                while (serverResponse != null) {
-                    switch (serverResponse.getResponseCode()){
-                        case 10:
-                            //hata popup
-                            if (!isPopupShown){
-                                Popup.showPopup(loginUI,"Giriş yapılamadı!");
-                                isPopupShown = true;
-                            }
-                            break;
-                        case 11:
-                            loginUI.setVisible(false);
-                            chatUI.setVisible(true);
-                            break;
-                        case 20:
-                            //Hata popup
-                            if (!isPopupShown) {
-                                Popup.showPopup(uyeolUI, "Kullancı oluşturulmadı!");
-                                isPopupShown = true;
-                            }
-                            break;
-                        case 21:
-                            if (!isPopupShown){
-                                Popup.showPopup(uyeolUI,"Kullancı oluşturuldu!");
-                                isPopupShown = true;
-                            }
-                            break;
-                        case 31:
-                            new Thread(() -> {
-                                //mesaj nesnesini alıp ondan anlamlı mesaj stringi oluşturalım
-                                Mesaj mesaj = serverResponse.getMesaj();
-                                String string = mesaj.getGonderici() + "[" + mesaj.getTime() + "]: " + mesaj.getMesaj() + "\n";
-                                //Sonra mesajı chate yazdıralım ve alanı temizleyelim
-                                chatUI.writeMessageArea(string);
-                                chatUI.setMessageArea("");
-
-                            }).start();
-                            break;
-
-                        default:
-                            System.out.println("Hata oluştu");
+                    if (serverResponse != null) {
+                        switch (serverResponse.getResponseCode()) {
+                            case 10:
+                                break;
+                            case 11:
+                                System.out.println("oldu");
+                                loginUI.setVisible(false);
+                                chatUI.setVisible(true);
+                                break;
+                            case 20:
+                                break;
+                            case 21:
+                                break;
+                            case 31:
+                                new Thread(() -> {
+                                    // Create a readable message from the `Mesaj` object
+                                    Mesaj mesaj = serverResponse.getMesaj();
+                                    String string = mesaj.getGonderici() + "[" + mesaj.getTime() + "]: " + mesaj.getMesaj() + "\n";
+                                    chatUI.writeMessageArea(string);
+                                    chatUI.setMessageField(""); // Clear the input field
+                                }).start();
+                                break;
+                            default:
+                                System.out.println("Hata oluştu");
+                        }
                     }
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }).start();
@@ -179,17 +161,21 @@ public class Client {
     }
 
     public void gonder(Gonderi gonderi) {
-        new Thread(() -> {
-            synchronized (this) {
-            try {
-                String responseString = SifrelemeClient.sifrele(gonderi);
-                out.writeObject(responseString);
-                out.flush();
+        SwingWorker worker = new SwingWorker<Void, Void>(){
+            @Override
+            protected Void doInBackground() throws Exception {
+                try {
+                    String responseString = SifrelemeClient.sifrele(gonderi);
+                    out.writeObject(responseString);
+                    out.flush();
 
-            } catch (Exception e) {
-                e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
             }
-        }}).start();
+        };
+
 
 
     }
