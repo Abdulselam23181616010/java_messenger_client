@@ -1,7 +1,11 @@
-public class Gonderi {
+import java.io.Serializable;
+
+public class Gonderi implements Serializable {
+    private static final long serialVersionUID = 8185736556051931014L;
     private int requestType;
     private Mesaj mesaj;
-    private User user;
+    private int responseCode;
+
 
     //Gonderi için constructor oluşturalım
     public Gonderi(int requestType, Mesaj mesaj){
@@ -10,10 +14,28 @@ public class Gonderi {
 
     }
 
-    //Sonra child sınıflarda bu metodu yeniden biçimlendireceğiz
-    public boolean islemYap(){
-        return true;
+    public void setResponseCode(int responseCode){
+        this.responseCode = responseCode;
+    }
 
+    public int getResponseCode(){
+        return responseCode;
+    }
+
+    public void setRequestType(int requestType) {
+        this.requestType = requestType;
+    }
+
+    public int getRequestType() {
+        return requestType;
+    }
+
+    public void setMesaj(Mesaj mesaj) {
+        this.mesaj = mesaj;
+    }
+
+    public Mesaj getMesaj() {
+        return mesaj;
     }
 
 

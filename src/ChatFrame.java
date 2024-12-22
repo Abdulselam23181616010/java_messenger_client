@@ -5,13 +5,13 @@ import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Mesajdeneme extends JFrame {
+public class ChatFrame extends JFrame {
     private JTextArea messageArea;
     private JTextField messageField;
     private JButton sendButton;
     private JButton  geri;
 
-    public Mesajdeneme() {
+    public ChatFrame() {
         // Pencere başlığı
         super("Mesajlaşma Ekranı");
 
@@ -35,39 +35,12 @@ public class Mesajdeneme extends JFrame {
 
         sendButton = new JButton("Gönder"); // Gönder butonu
         inputPanel.add(sendButton, BorderLayout.EAST);
-        geri = new JButton("germiş yükle");
+        geri = new JButton("geçmiş yükle");
         inputPanel.add(geri, BorderLayout.WEST);
 
 
         add(inputPanel, BorderLayout.SOUTH);
 
-        // Gönder butonuna tıklama işlemi
-        sendButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-
-                String message = messageField.getText().trim();
-                if (!message.isEmpty()) {
-                    // Şu anki tarih ve saati al ve biçimlendir
-                    LocalDateTime currentTime = LocalDateTime.now();
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // Yıl-ay-gün saat:dakika:saniye
-                    String formattedDateTime = currentTime.format(formatter);
-
-                    // Mesajı alanın içine ekle
-                    messageArea.append("Sen (" + formattedDateTime + "): " + message + "\n");
-                    messageField.setText(""); // Alanı temizle
-                }
-            }
-        });
-
-        // Enter tuşuyla gönderme
-        messageField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                sendButton.doClick(); // Butona tıklama işlevini çağır
-            }
-        });
 
         // Pencere ayarları
         setSize(500, 500);
@@ -75,9 +48,36 @@ public class Mesajdeneme extends JFrame {
         setLocationRelativeTo(null); // Ortala
     }
 
-    public static void mesajPage() {
+    public void addSendListener(ActionListener listener){
+        sendButton.addActionListener(listener);
+    }
+
+
+
+    public JTextField getMessageField(){
+        return messageField;
+
+    }
+
+    public void writeMessageArea(String mesaj) {
         SwingUtilities.invokeLater(() -> {
-            new Mesajdeneme().setVisible(true);
+            this.messageArea.append(mesaj);
         });
+    }
+
+    public JTextArea getMessageArea(){
+        return messageArea;
+    }
+
+    public void setMessageArea(String string){
+        this.messageArea.setText(string);
+    }
+
+    public JButton getSendButton() {
+        return sendButton;
+    }
+
+    public void setMessageField(String s) {
+        messageField.setText(s);
     }
 }

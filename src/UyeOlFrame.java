@@ -90,12 +90,6 @@ public class UyeOlFrame extends JFrame {
 
 
         Color eskirenk2  = geriGit.getBackground();
-        geriGit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
 
         geriGit.addMouseListener(new MouseAdapter() {
             @Override
