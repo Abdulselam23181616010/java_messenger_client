@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.http.WebSocket;
 
+//Kullancının giriş yapmak istediği zaman karşıya çıkan arayüzdür
 public class LoginFrame extends JFrame {
     //Başta text fieldler, giriş ve uye olma butonlarını ekleyelim
     private JTextField usernameField = new JTextField();
@@ -112,6 +113,16 @@ public class LoginFrame extends JFrame {
             }
         });
     }
+    //Gerekli olan getterler
+    public String getUsername() {
+        return usernameField.getText();
+    }
+
+    public String getSifre() {
+        return new String(sifreField.getText());
+    }
+
+    //Bu butona bastığında oluşan işlemleri sonra kullanılacak olacağımız metodları oluşturalım.
     public void addGirisListener(ActionListener listener) {
         girisButonu.addActionListener(listener);
 
@@ -121,13 +132,6 @@ public class LoginFrame extends JFrame {
     }
 
 
-    public String getUsername() {
-        return usernameField.getText();
-    }
-
-    public String getSifre() {
-        return new String(sifreField.getText());
-    }
 }
 
 

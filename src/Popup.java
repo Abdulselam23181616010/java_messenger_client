@@ -2,14 +2,13 @@
 import javax.swing.*;
 
 public class Popup {
-
-    // Method to show a positive message popup
+    //Bilgilendirme amaçlı popup nesnesini gösteren metod
     public static void showPopup(JFrame parentFrame, String message) {
         JOptionPane.showMessageDialog(
                 parentFrame,
-                message,        // Positive message to display
-                "Bilgilendirme",              // Title of the dialog
-                JOptionPane.INFORMATION_MESSAGE // Type of message
+                message,        // gösterilecek mesaj
+                "Bilgilendirme",              // başlık
+                JOptionPane.INFORMATION_MESSAGE // mesaj türü
         );
     }
 }
